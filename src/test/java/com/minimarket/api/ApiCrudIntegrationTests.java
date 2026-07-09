@@ -2,6 +2,7 @@ package com.minimarket.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.minimarket.support.HateoasTestSupport;
 import com.minimarket.support.SecurityTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -128,9 +129,10 @@ class ApiCrudIntegrationTests {
                 .getResponse()
                 .getContentAsString(StandardCharsets.UTF_8);
 
-        JsonNode usuarios = objectMapper.readTree(response);
+        JsonNode usuarios = HateoasTestSupport.extractCollection(objectMapper.readTree(response), "usuarios");
         assertTrue(usuarios.isArray());
         assertTrue(usuarios.size() >= 3);
+        assertTrue(objectMapper.readTree(response).has("_links"));
     }
 
     @Test

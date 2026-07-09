@@ -1,29 +1,38 @@
 package com.minimarket.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Relation(collectionRelation = "inventario", itemRelation = "movimiento")
+@Schema(description = "Movimiento de entrada o salida de stock de un producto")
 public class Inventario {
 
     public static final Set<String> TIPOS_MOVIMIENTO_VALIDOS = Set.of("Entrada", "Salida");
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Identificador del movimiento", example = "1")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
+    @Schema(description = "Producto afectado por el movimiento", requiredMode = Schema.RequiredMode.REQUIRED)
     private Producto producto;
 
     @Column(nullable = false)
+    @Schema(description = "Cantidad del movimiento", example = "10", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer cantidad;
 
     @Column(nullable = false)
+    @Schema(description = "Tipo de movimiento: Entrada o Salida", example = "Entrada", requiredMode = Schema.RequiredMode.REQUIRED)
     private String tipoMovimiento;
 
     @Column(nullable = false)
+    @Schema(description = "Fecha del movimiento", requiredMode = Schema.RequiredMode.REQUIRED)
     private Date fechaMovimiento;
 
     // Getters y Setters

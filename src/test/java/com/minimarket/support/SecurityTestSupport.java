@@ -2,6 +2,7 @@ package com.minimarket.support;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.minimarket.support.HateoasTestSupport;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -92,7 +93,7 @@ public final class SecurityTestSupport {
                 .getResponse()
                 .getContentAsString(StandardCharsets.UTF_8);
 
-        JsonNode usuarios = objectMapper.readTree(response);
+        JsonNode usuarios = HateoasTestSupport.extractCollection(objectMapper.readTree(response), "usuarios");
         for (JsonNode usuario : usuarios) {
             if (username.equalsIgnoreCase(usuario.get("username").asText())) {
                 return usuario.get("id").asLong();

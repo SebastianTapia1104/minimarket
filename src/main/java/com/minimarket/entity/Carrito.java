@@ -1,22 +1,30 @@
 package com.minimarket.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import org.springframework.hateoas.server.core.Relation;
 
 @Entity
+@Relation(collectionRelation = "carrito", itemRelation = "item-carrito")
+@Schema(description = "Ítem del carrito de compras asociado a un usuario y producto")
 public class Carrito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Identificador único del ítem en el carrito", example = "1")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
+    @Schema(description = "Usuario propietario del carrito", requiredMode = Schema.RequiredMode.REQUIRED)
     private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
+    @Schema(description = "Producto agregado al carrito", requiredMode = Schema.RequiredMode.REQUIRED)
     private Producto producto;
 
     @Column(nullable = false)
+    @Schema(description = "Cantidad de unidades del producto", example = "3", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer cantidad;
 
     // Getters y Setters

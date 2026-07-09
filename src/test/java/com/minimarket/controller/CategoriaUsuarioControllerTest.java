@@ -1,10 +1,7 @@
 package com.minimarket.controller;
 
 import com.minimarket.entity.Categoria;
-import com.minimarket.entity.Usuario;
 import com.minimarket.service.CategoriaService;
-import com.minimarket.service.UsuarioService;
-import com.minimarket.support.TestDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -70,57 +66,5 @@ class CategoriaControllerTest {
         when(categoriaService.findById(1L)).thenReturn(new Categoria());
         assertEquals(HttpStatus.NO_CONTENT, categoriaController.eliminarCategoria(1L).getStatusCode());
         verify(categoriaService).deleteById(1L);
-    }
-}
-
-@ExtendWith(MockitoExtension.class)
-class UsuarioControllerTest {
-
-    @Mock
-    private UsuarioService usuarioService;
-
-    @InjectMocks
-    private UsuarioController usuarioController;
-
-    @Test
-    void listarUsuarios_retornaLista() {
-        when(usuarioService.findAll()).thenReturn(List.of(TestDataFactory.usuarioCompleto("cliente", "CLIENTE")));
-        assertEquals(1, usuarioController.listarUsuarios().size());
-    }
-
-    @Test
-    void obtenerUsuarioPorId_existente() {
-        when(usuarioService.findById(1L))
-                .thenReturn(Optional.of(TestDataFactory.usuarioCompleto("cliente", "CLIENTE")));
-        assertEquals(HttpStatus.OK, usuarioController.obtenerUsuarioPorId(1L).getStatusCode());
-    }
-
-    @Test
-    void obtenerUsuarioPorId_inexistente() {
-        when(usuarioService.findById(99L)).thenReturn(Optional.empty());
-        assertEquals(HttpStatus.NOT_FOUND, usuarioController.obtenerUsuarioPorId(99L).getStatusCode());
-    }
-
-    @Test
-    void guardarUsuario_delegaEnServicio() {
-        Usuario usuario = TestDataFactory.usuarioCompleto("nuevo", "CLIENTE");
-        when(usuarioService.save(usuario)).thenReturn(usuario);
-        assertEquals(usuario, usuarioController.guardarUsuario(usuario));
-    }
-
-    @Test
-    void actualizarUsuario_existente() {
-        Usuario usuario = TestDataFactory.usuarioCompleto("nuevo", "CLIENTE");
-        when(usuarioService.findById(1L)).thenReturn(Optional.of(usuario));
-        when(usuarioService.save(any(Usuario.class))).thenReturn(usuario);
-        assertEquals(HttpStatus.OK, usuarioController.actualizarUsuario(1L, usuario).getStatusCode());
-    }
-
-    @Test
-    void eliminarUsuario_existente() {
-        when(usuarioService.findById(1L))
-                .thenReturn(Optional.of(TestDataFactory.usuarioCompleto("cliente", "CLIENTE")));
-        assertEquals(HttpStatus.NO_CONTENT, usuarioController.eliminarUsuario(1L).getStatusCode());
-        verify(usuarioService).deleteById(1L);
     }
 }

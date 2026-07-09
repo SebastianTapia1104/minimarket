@@ -1,13 +1,20 @@
 package com.minimarket.controller;
 
 import com.minimarket.entity.Producto;
+import com.minimarket.hateoas.ProductoModelAssembler;
 import com.minimarket.service.ProductoService;
 import com.minimarket.support.TestDataFactory;
+import com.minimarket.support.HateoasTestSupport;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -20,19 +27,30 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class ProductoControllerTest {
 
     @Mock
     private ProductoService productoService;
 
+    @Mock
+    private ProductoModelAssembler productoAssembler;
+
     @InjectMocks
     private ProductoController productoController;
+
+    @BeforeEach
+    void setUp() {
+        when(productoAssembler.toModel(any(Producto.class))).thenAnswer(invocation -> EntityModel.of(invocation.getArgument(0)));
+        when(productoAssembler.toCollectionModel(any())).thenAnswer(invocation ->
+                HateoasTestSupport.toCollectionModel((Iterable<Producto>) invocation.getArgument(0)));
+    }
 
     @Test
     void listarProductos_retornaLista() {
         when(productoService.findAll()).thenReturn(List.of(TestDataFactory.producto(1L, "Arroz", 1000, 5)));
 
-        assertEquals(1, productoController.listarProductos().size());
+        assertEquals(1, productoController.listarProductos().getContent().size());
     }
 
     @Test
@@ -40,7 +58,7 @@ class ProductoControllerTest {
         Producto producto = TestDataFactory.producto(1L, "Arroz", 1000, 5);
         when(productoService.findById(1L)).thenReturn(producto);
 
-        ResponseEntity<Producto> response = productoController.obtenerProductoPorId(1L);
+        ResponseEntity<EntityModel<Producto>> response = productoController.obtenerProductoPorId(1L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -50,7 +68,7 @@ class ProductoControllerTest {
     void obtenerProductoPorId_inexistente() {
         when(productoService.findById(99L)).thenReturn(null);
 
-        ResponseEntity<Producto> response = productoController.obtenerProductoPorId(99L);
+        ResponseEntity<EntityModel<Producto>> response = productoController.obtenerProductoPorId(99L);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
@@ -60,7 +78,7 @@ class ProductoControllerTest {
         Producto producto = TestDataFactory.producto(1L, "Arroz", 1000, 5);
         when(productoService.save(producto)).thenReturn(producto);
 
-        assertSameProducto(producto, productoController.guardarProducto(producto));
+        assertSameProducto(producto, productoController.guardarProducto(producto).getContent());
     }
 
     @Test
@@ -69,7 +87,7 @@ class ProductoControllerTest {
         when(productoService.findById(1L)).thenReturn(producto);
         when(productoService.save(any(Producto.class))).thenReturn(producto);
 
-        ResponseEntity<Producto> response = productoController.actualizarProducto(1L, producto);
+        ResponseEntity<EntityModel<Producto>> response = productoController.actualizarProducto(1L, producto);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -78,7 +96,7 @@ class ProductoControllerTest {
     void actualizarProducto_inexistente() {
         when(productoService.findById(99L)).thenReturn(null);
 
-        ResponseEntity<Producto> response = productoController.actualizarProducto(99L, new Producto());
+        ResponseEntity<EntityModel<Producto>> response = productoController.actualizarProducto(99L, new Producto());
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }

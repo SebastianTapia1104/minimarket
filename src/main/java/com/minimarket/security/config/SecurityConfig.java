@@ -95,7 +95,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/public/**", "/app/index_normal", "/api/public", "/api/auth/**",
                         "/api/security/info", "/api/security/oauth2/status", "/error",
-                        "/h2-console/**", "/oauth2/**", "/login/oauth2/**").permitAll()
+                        "/h2-console/**", "/oauth2/**", "/login/oauth2/**",
+                        "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/app/index_protegido", "/api/private").authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/productos/**", "/api/categorias/**")
                 .hasAnyRole("CLIENTE", "EMPLEADO", "GERENTE")

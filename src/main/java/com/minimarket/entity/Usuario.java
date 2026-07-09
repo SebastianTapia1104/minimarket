@@ -1,10 +1,14 @@
 package com.minimarket.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import org.springframework.hateoas.server.core.Relation;
 import java.util.Set;
 
 @Entity
+@Relation(collectionRelation = "usuarios", itemRelation = "usuario")
+@Schema(description = "Usuario del minimarket con roles asignados")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
