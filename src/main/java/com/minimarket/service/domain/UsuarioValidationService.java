@@ -9,7 +9,7 @@ import java.util.Set;
 @Service
 public class UsuarioValidationService {
 
-    private static final Set<String> ROLES_VENTA = Set.of("EMPLEADO");
+    private static final Set<String> ROLES_VENTA = Set.of("EMPLEADO", "CAJERO");
 
     public boolean tieneDatosCompletos(Usuario usuario) {
         if (usuario == null) {

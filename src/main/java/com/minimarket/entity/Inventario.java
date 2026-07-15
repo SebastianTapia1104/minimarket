@@ -23,6 +23,11 @@ public class Inventario {
     @Schema(description = "Producto afectado por el movimiento", requiredMode = Schema.RequiredMode.REQUIRED)
     private Producto producto;
 
+    @ManyToOne
+    @JoinColumn(name = "sucursal_id")
+    @Schema(description = "Sucursal donde ocurre el movimiento (opcional para compatibilidad)")
+    private Sucursal sucursal;
+
     @Column(nullable = false)
     @Schema(description = "Cantidad del movimiento", example = "10", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer cantidad;
@@ -50,6 +55,14 @@ public class Inventario {
 
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
     }
 
     public Integer getCantidad() {
@@ -100,6 +113,9 @@ public class Inventario {
         }
         return usuario.getRoles().stream()
                 .map(Rol::getNombre)
-                .anyMatch(rol -> "EMPLEADO".equals(rol) || "GERENTE".equals(rol));
+                .anyMatch(rol -> "EMPLEADO".equals(rol)
+                        || "REPONEDOR".equals(rol)
+                        || "JEFE_TURNO".equals(rol)
+                        || "GERENTE".equals(rol));
     }
 }

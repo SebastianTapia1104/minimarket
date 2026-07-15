@@ -19,6 +19,8 @@ public class RegisterRequest {
 
     private Set<String> roles;
 
+    private boolean consentimientoDatosPersonales = true;
+
     public String getUsername() {
         return username;
     }
@@ -73,5 +75,13 @@ public class RegisterRequest {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public boolean isConsentimientoDatosPersonales() {
+        return consentimientoDatosPersonales;
+    }
+
+    public void setConsentimientoDatosPersonales(boolean consentimientoDatosPersonales) {
+        this.consentimientoDatosPersonales = consentimientoDatosPersonales;
     }
 }

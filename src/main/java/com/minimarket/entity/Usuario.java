@@ -33,6 +33,10 @@ public class Usuario {
     @JsonIgnore
     private String password;
 
+    @Column(nullable = false)
+    @Schema(description = "Consentimiento de tratamiento de datos personales (Ley 19.628 / Ley 21.719)")
+    private boolean consentimientoDatosPersonales = false;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_roles",
@@ -96,6 +100,14 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isConsentimientoDatosPersonales() {
+        return consentimientoDatosPersonales;
+    }
+
+    public void setConsentimientoDatosPersonales(boolean consentimientoDatosPersonales) {
+        this.consentimientoDatosPersonales = consentimientoDatosPersonales;
     }
 
     public Set<Rol> getRoles() {

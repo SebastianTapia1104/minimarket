@@ -61,6 +61,7 @@ public class AuthService {
         usuario.setEmail(defaultIfBlank(request.getEmail(), username + "@minimarket.cl"));
         usuario.setDireccion(defaultIfBlank(request.getDireccion(), "Sin direccion registrada"));
         usuario.setPassword(passwordEncoder.encode(request.getPassword()));
+        usuario.setConsentimientoDatosPersonales(request.isConsentimientoDatosPersonales());
         usuario.setRoles(roles);
 
         Usuario savedUser = usuarioRepository.save(usuario);

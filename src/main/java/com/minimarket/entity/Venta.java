@@ -93,6 +93,6 @@ public class Venta {
         }
         return usuario.getRoles().stream()
                 .map(Rol::getNombre)
-                .anyMatch("EMPLEADO"::equals);
+                .anyMatch(rol -> "EMPLEADO".equals(rol) || "CAJERO".equals(rol));
     }
 }

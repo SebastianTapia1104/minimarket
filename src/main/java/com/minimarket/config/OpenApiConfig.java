@@ -19,12 +19,16 @@ public class OpenApiConfig {
     public OpenAPI minimarketOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Minimarket API")
-                        .description("API REST para la gestión de productos, carrito de compras y ventas del minimarket.")
-                        .version("1.0.0")
+                        .title("MiniMarket Plus API")
+                        .description("""
+                                API REST de MiniMarket Plus organizada en microservicios lógicos:
+                                seguridad, catálogo, inventario multi-sucursal, ventas/pedidos,
+                                promociones, reportes y usuarios. Cumple OAS, HATEOAS, JWT y RBAC.
+                                """)
+                        .version("2.0.0")
                         .contact(new Contact()
-                                .name("Equipo Minimarket")
-                                .email("soporte@minimarket.cl")))
+                                .name("Equipo MiniMarket Plus")
+                                .email("soporte@minimarketplus.cl")))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()

@@ -94,30 +94,38 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/public/**", "/app/index_normal", "/api/public", "/api/auth/**",
-                        "/api/security/info", "/api/security/oauth2/status", "/error",
-                        "/h2-console/**", "/oauth2/**", "/login/oauth2/**",
+                        "/api/security/info", "/api/security/oauth2/status", "/api/privacidad/**",
+                        "/error", "/h2-console/**", "/oauth2/**", "/login/oauth2/**",
                         "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/app/index_protegido", "/api/private").authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/productos/**", "/api/categorias/**")
-                .hasAnyRole("CLIENTE", "EMPLEADO", "GERENTE")
-                .requestMatchers(HttpMethod.POST, "/api/carrito/**", "/api/detalle-ventas/**")
-                .hasAnyRole("CLIENTE", "EMPLEADO", "GERENTE")
+                .requestMatchers(HttpMethod.GET, "/api/productos/**", "/api/categorias/**",
+                        "/api/sucursales/**", "/api/promociones/**",
+                        "/api/stock-sucursal/disponibilidad/**")
+                .hasAnyRole("CLIENTE", "EMPLEADO", "GERENTE", "JEFE_TURNO", "REPONEDOR", "CAJERO", "ASISTENTE_CLIENTE")
+                .requestMatchers(HttpMethod.POST, "/api/carrito/**", "/api/detalle-ventas/**", "/api/pedidos/**")
+                .hasAnyRole("CLIENTE", "EMPLEADO", "GERENTE", "CAJERO", "ASISTENTE_CLIENTE")
                 .requestMatchers(HttpMethod.POST, "/api/ventas/**")
-                .hasRole("EMPLEADO")
+                .hasAnyRole("EMPLEADO", "CAJERO")
                 .requestMatchers(HttpMethod.GET, "/api/carrito/**", "/api/ventas/**", "/api/detalle-ventas/**")
-                .hasAnyRole("EMPLEADO", "GERENTE")
-                .requestMatchers("/api/inventario/**").hasAnyRole("EMPLEADO", "GERENTE")
+                .hasAnyRole("EMPLEADO", "GERENTE", "JEFE_TURNO", "CAJERO", "ASISTENTE_CLIENTE")
+                .requestMatchers(HttpMethod.GET, "/api/pedidos/**")
+                .hasAnyRole("EMPLEADO", "GERENTE", "JEFE_TURNO", "CAJERO", "ASISTENTE_CLIENTE", "CLIENTE")
+                .requestMatchers("/api/inventario/**", "/api/stock-sucursal/**", "/api/ordenes-compra/**",
+                        "/api/proveedores/**")
+                .hasAnyRole("EMPLEADO", "GERENTE", "JEFE_TURNO", "REPONEDOR")
+                .requestMatchers("/api/reportes/**").hasAnyRole("GERENTE", "JEFE_TURNO")
                 .requestMatchers("/api/security/audit/**").hasRole("GERENTE")
                 .requestMatchers("/api/usuarios/**").hasRole("GERENTE")
-                .requestMatchers(HttpMethod.POST, "/api/productos/**")
+                .requestMatchers(HttpMethod.POST, "/api/productos/**", "/api/sucursales/**")
                 .hasRole("GERENTE")
-                .requestMatchers(HttpMethod.POST, "/api/categorias/**")
-                .hasAnyRole("EMPLEADO", "GERENTE")
-                .requestMatchers(HttpMethod.PUT, "/api/productos/**")
+                .requestMatchers(HttpMethod.POST, "/api/categorias/**", "/api/promociones/**")
+                .hasAnyRole("EMPLEADO", "GERENTE", "JEFE_TURNO")
+                .requestMatchers(HttpMethod.PUT, "/api/productos/**", "/api/sucursales/**")
                 .hasRole("GERENTE")
-                .requestMatchers(HttpMethod.PUT, "/api/categorias/**")
-                .hasAnyRole("EMPLEADO", "GERENTE")
-                .requestMatchers(HttpMethod.DELETE, "/api/productos/**", "/api/categorias/**")
+                .requestMatchers(HttpMethod.PUT, "/api/categorias/**", "/api/promociones/**", "/api/pedidos/**")
+                .hasAnyRole("EMPLEADO", "GERENTE", "JEFE_TURNO", "CAJERO", "ASISTENTE_CLIENTE")
+                .requestMatchers(HttpMethod.DELETE, "/api/productos/**", "/api/categorias/**",
+                        "/api/sucursales/**", "/api/promociones/**")
                 .hasRole("GERENTE")
                 .anyRequest().authenticated()
         );

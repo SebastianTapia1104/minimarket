@@ -20,6 +20,7 @@ public final class TestDataFactory {
         usuario.setEmail(username + "@minimarket.cl");
         usuario.setDireccion("Av. Providencia 100, Santiago");
         usuario.setPassword("hash");
+        usuario.setConsentimientoDatosPersonales(true);
 
         Rol rol = new Rol();
         rol.setId(1L);

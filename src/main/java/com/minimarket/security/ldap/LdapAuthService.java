@@ -77,6 +77,7 @@ public class LdapAuthService {
             usuario.setEmail(username + "@minimarket.cl");
             usuario.setDireccion("Usuario sincronizado desde LDAP");
             usuario.setPassword(passwordEncoder.encode("LDAP_SYNCED_USER"));
+            usuario.setConsentimientoDatosPersonales(true);
             usuario.setRoles(mapRoles(authentication));
             return usuarioRepository.save(usuario);
         });

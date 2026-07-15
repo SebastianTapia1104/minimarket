@@ -86,9 +86,21 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             });
             Usuario usuario = new Usuario();
             usuario.setUsername(username);
+            usuario.setNombre(capitalize(username));
+            usuario.setApellido("IDaaS");
+            usuario.setEmail(username.contains("@") ? username : username + "@minimarket.cl");
+            usuario.setDireccion("Usuario sincronizado desde IDaaS");
             usuario.setPassword(passwordEncoder.encode("IDaaS_SYNCED_USER"));
+            usuario.setConsentimientoDatosPersonales(true);
             usuario.setRoles(new HashSet<>(Set.of(cliente)));
             return usuarioRepository.save(usuario);
         });
+    }
+
+    private String capitalize(String value) {
+        if (value == null || value.isBlank()) {
+            return value;
+        }
+        return Character.toUpperCase(value.charAt(0)) + value.substring(1);
     }
 }

@@ -1,83 +1,235 @@
-# MiniMarket Plus API
+# 🛒 MiniMarket Plus API
 
 ## Descripción
 
-**MiniMarket Plus API** es una aplicación backend desarrollada con **Spring Boot** que implementa una API REST para la gestión de un minimarket.
+MiniMarket Plus API es una aplicación backend desarrollada con **Spring Boot 3** que implementa una API REST para la administración de un minimarket.
 
-El proyecto permite administrar:
+El sistema permite gestionar productos, categorías, inventario, usuarios, ventas y carrito de compras, incorporando mecanismos de autenticación mediante JWT, autorización basada en roles, documentación automática con OpenAPI (Swagger) y navegación entre recursos utilizando Spring HATEOAS.
 
-* Productos
-* Categorías
-* Inventario
-* Carrito de compras
-* Ventas
-* Usuarios y autenticación
+El proyecto fue desarrollado para la asignatura **Desarrollo Backend II (PBY2202)**.
 
-Se implementaron mecanismos de seguridad mediante **Spring Security**, autenticación con **JWT**, soporte para **LDAP embebido** y configuración opcional para **OAuth2 Resource Server**. Además, se desarrollaron pruebas unitarias y de integración utilizando **JUnit 5**, **Mockito** y **JaCoCo** para validar el correcto funcionamiento del sistema.
+---
+
+# Funcionalidades
+
+El sistema permite:
+
+- Gestión de productos.
+- Gestión de categorías.
+- Gestión de inventario.
+- Gestión del carrito de compras.
+- Gestión de ventas.
+- Gestión de usuarios.
+- Autenticación mediante JWT.
+- Control de acceso por roles.
+- Documentación automática con OpenAPI.
+- Navegación mediante enlaces HATEOAS.
+- Pruebas unitarias e integración.
 
 ---
 
 # Tecnologías utilizadas
 
-* Java 17
-* Spring Boot 3
-* Spring Security
-* Spring Data JPA
-* H2 Database
-* Maven Wrapper
-* JUnit 5
-* Mockito
-* JaCoCo
-* JWT
-* LDAP Embedded
-* OAuth2 Resource Server (configuración disponible)
+| Tecnología | Descripción |
+|------------|-------------|
+| Java 17 | Lenguaje de programación |
+| Spring Boot 3 | Framework principal |
+| Spring Security | Seguridad |
+| Spring Data JPA | Persistencia |
+| Spring HATEOAS | Hipermedia |
+| SpringDoc OpenAPI | Documentación |
+| Swagger UI | Visualización de la API |
+| JWT | Autenticación |
+| Embedded LDAP | Autenticación LDAP |
+| OAuth2 Resource Server | Seguridad OAuth2 |
+| H2 Database | Base de datos en memoria |
+| Maven | Gestión de dependencias |
+| JUnit 5 | Pruebas unitarias |
+| Mockito | Mocking |
+| MockMvc | Pruebas de controladores |
+| JaCoCo | Cobertura de código |
 
 ---
 
-# Requisitos
+# Arquitectura
 
-Antes de ejecutar el proyecto asegúrate de contar con:
+El proyecto utiliza una arquitectura en capas.
 
-* Java 17 o superior
-* Conexión a Internet en la primera ejecución (para descargar dependencias de Maven)
+```
+Cliente
+    │
+    ▼
+Controllers
+    │
+    ▼
+Services
+    │
+    ▼
+Repositories
+    │
+    ▼
+Base de Datos
+```
 
-No es necesario instalar Maven ni configurar una base de datos externa, ya que el proyecto utiliza **Maven Wrapper** y una base de datos **H2 en memoria**.
+Esta organización permite mantener una separación clara entre la lógica de presentación, negocio y persistencia.
 
 ---
 
-# Ejecución del proyecto
-
-## Windows
-
-```bash
-.\mvnw.cmd spring-boot:run
-```
-
-La aplicación quedará disponible en:
+# Estructura del proyecto
 
 ```
-http://localhost:8081
+minimarket/
+│
+├── pom.xml
+├── mvnw
+├── mvnw.cmd
+├── README.md
+│
+├── docs/
+│   └── evidencias/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/minimarket/
+│   │   │
+│   │   ├── config/
+│   │   │
+│   │   ├── controller/
+│   │   │
+│   │   ├── entity/
+│   │   │
+│   │   ├── hateoas/
+│   │   │
+│   │   ├── repository/
+│   │   │
+│   │   ├── service/
+│   │   │   ├── domain/
+│   │   │   └── impl/
+│   │   │
+│   │   ├── security/
+│   │   │   ├── audit/
+│   │   │   ├── config/
+│   │   │   ├── jwt/
+│   │   │   ├── ldap/
+│   │   │   ├── model/
+│   │   │   ├── oauth/
+│   │   │   └── service/
+│   │   │
+│   │   └── MinimarketApplication.java
+│   │
+│   └── resources/
+│       ├── application.properties
+│       └── ldap/
+│
+└── test/
+    └── java/
+        └── com/minimarket/
+            ├── api/
+            ├── controller/
+            ├── entity/
+            ├── security/
+            ├── service/
+            └── support/
 ```
-
-> El puerto utilizado es **8081**, ya que durante el desarrollo el puerto 8080 se encontraba ocupado.
 
 ---
 
-# Ejecución de pruebas
+# Seguridad
 
-Para ejecutar todas las pruebas:
+La aplicación incorpora múltiples mecanismos de seguridad:
+
+- Spring Security.
+- JWT Authentication.
+- Control de acceso basado en roles (RBAC).
+- Embedded LDAP.
+- OAuth2 Resource Server.
+- Protección de endpoints.
+- Auditoría de eventos de seguridad.
+
+### Roles disponibles
+
+| Rol | Permisos |
+|------|----------|
+| GERENTE | Administración completa del sistema |
+| EMPLEADO | Gestión de inventario y ventas |
+| CLIENTE | Consulta de productos y carrito |
+
+---
+
+# Documentación de la API
+
+La documentación se genera automáticamente mediante **SpringDoc OpenAPI**.
+
+Swagger UI:
+
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+Documentación OpenAPI (JSON):
+
+```
+http://localhost:8080/v3/api-docs
+```
+
+La documentación incluye:
+
+- Endpoints REST.
+- Parámetros.
+- Request Body.
+- Responses.
+- Modelos.
+- Esquema de autenticación JWT.
+
+---
+
+# Implementación de HATEOAS
+
+El proyecto incorpora Spring HATEOAS para mejorar la navegabilidad de la API.
+
+Se implementaron assemblers para:
+
+- Producto
+- Carrito
+- Inventario
+- Usuario
+
+Las respuestas incluyen enlaces dinámicos como:
+
+- self
+- productos
+- inventario
+- carrito
+- usuarios
+
+permitiendo descubrir recursos relacionados sin depender de URLs codificadas manualmente.
+
+---
+
+# Pruebas
+
+El proyecto incorpora:
+
+- Pruebas unitarias.
+- Pruebas de integración.
+- Pruebas de seguridad.
+- Pruebas de controladores.
+- Cobertura mediante JaCoCo.
+
+Ejecutar todas las pruebas:
 
 ```bash
 .\mvnw test
 ```
 
-Para ejecutar las pruebas junto con el análisis de cobertura:
+Generar reporte de cobertura:
 
 ```bash
 .\mvnw verify
 ```
 
-El reporte HTML generado por JaCoCo se encuentra en:
+El reporte se genera en:
 
 ```
 target/site/jacoco/index.html
@@ -85,84 +237,57 @@ target/site/jacoco/index.html
 
 ---
 
-# Estructura del proyecto
+# Ejecución
 
-```
-src
-├── main
-│   ├── java
-│   │   └── com.minimarket
-│   │       ├── controller
-│   │       ├── dto
-│   │       ├── entity
-│   │       ├── exception
-│   │       ├── repository
-│   │       ├── security
-│   │       ├── service
-│   │       └── config
-│   └── resources
-│
-└── test
-    └── java
-        └── com.minimarket
+## Requisitos
+
+- Java 17 o superior.
+
+## Clonar repositorio
+
+```bash
+git clone https://github.com/USUARIO/minimarket.git
 ```
 
----
+## Ejecutar
 
-# Seguridad implementada
+Windows
 
-El sistema incorpora distintos mecanismos de seguridad:
+```bash
+.\mvnw.cmd spring-boot:run
+```
 
-* Autenticación mediante JWT.
-* Control de acceso basado en roles (RBAC).
-* LDAP embebido para autenticación durante el desarrollo.
-* Configuración para OAuth2 Resource Server.
-* Protección de endpoints mediante Spring Security.
-* Auditoría básica de eventos relacionados con autenticación.
+Linux / macOS
 
-Los roles utilizados son:
+```bash
+./mvnw spring-boot:run
+```
 
-| Rol      | Permisos principales                       |
-| -------- | ------------------------------------------ |
-| GERENTE  | Administración completa del sistema        |
-| EMPLEADO | Gestión de ventas e inventario             |
-| CLIENTE  | Operaciones limitadas de consulta y compra |
+La aplicación estará disponible en:
 
----
-
-# Pruebas implementadas
-
-El proyecto incluye pruebas para validar:
-
-* Entidades del dominio.
-* Servicios.
-* Controladores.
-* Autenticación.
-* Autorización por roles.
-* Integración con Spring Security.
-
-Las pruebas fueron desarrolladas utilizando:
-
-* JUnit 5
-* Mockito
-* Spring Boot Test
-* MockMvc
-* JaCoCo
+```
+http://localhost:8080
+```
 
 ---
 
-# Cobertura de pruebas
+# Características destacadas
 
-La cobertura del proyecto fue analizada mediante **JaCoCo**, verificando el cumplimiento de los principales escenarios funcionales y de seguridad definidos para la actividad.
+- API REST desarrollada con Spring Boot.
+- Documentación interactiva mediante Swagger UI.
+- Navegación REST con Spring HATEOAS.
+- Autenticación JWT.
+- Control de acceso por roles.
+- Arquitectura en capas.
+- Cobertura de pruebas mediante JaCoCo.
+- Código organizado siguiendo buenas prácticas de desarrollo.
 
 ---
 
-# Autores
+# Integrantes
 
 Proyecto desarrollado para la asignatura **Desarrollo Backend II (PBY2202)**.
 
-Integrantes del equipo:
-
-* Sebastián Tapia
-* Sofía Medina
-* Ángel Cáceres
+- Sebastián Tapia
+- Sofía Medina
+- Ángel Cáceres
