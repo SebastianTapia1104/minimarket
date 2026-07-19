@@ -578,7 +578,7 @@ target/site/jacoco/index.html
 ### Resultados obtenidos
 
 ```text
-Pruebas ejecutadas: 221
+Pruebas ejecutadas: 213
 Fallos: 0
 Errores: 0
 Pruebas omitidas: 0
